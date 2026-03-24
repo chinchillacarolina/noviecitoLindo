@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feliz Cumpleaños ❤️</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+/* ===================== */
+/* PANTALLAS             */
+/* ===================== */
+.pantalla {
+  display: none;
+  width: 100%;
+  min-height: 100vh;
+}
+.activa    { display: block; }
+#p2.activa { display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 30px 20px; }
+#p3.activa { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; gap: 12px; }
+
+.roja { background-color: #5e2129; }
+.rosa { background-color: pink; }
+.azul { background-color: lightblue; }
+
+/* ===================== */
+/* BOTONES               */
+/* ===================== */
+button {
+  padding: 10px 22px;
+  border: none; border-radius: 20px;
+  cursor: pointer; font-weight: bold; color: white;
+  transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+.roja button { background-color: #641835; }
+.rosa button { background-color: #ff1493; }
+.azul button { background-color: #0066cc; }
+button:hover { opacity: 0.8; transform: scale(1.05); }
+
+/* ===================== */
+/* CORAZONES             */
+/* ===================== */
+.corazones {
+  position: fixed; inset: 0;
+  pointer-events: none; overflow: hidden; z-index: 50;
+}
+.corazones span {
+  position: absolute;
+  animation: flotar 10s linear infinite;
+}
+@keyframes flotar {
+  0%   { transform: translateY(100vh) scale(0); }
+  100% { transform: translateY(-10vh) scale(1); }
+}
+
+/* ===================== */
+/* PANTALLA 1            */
+/* ===================== */
+/* 
+  Layout en bloques verticales:
+  1. Fila de 4 fotos (arriba)
+  2. Fila del medio: foto-izq | hero | foto-der  (4 fotos por lado apiladas)
+  3. Fila de 4 fotos (abajo)
+*/
+
+.p1-fila-top,
+.p1-fila-bot {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  padding: 6px 6px 0 6px;
+}
+.p1-fila-bot { padding: 0 6px 6px 6px; }
+
+.p1-fila-top img,
+.p1-fila-bot img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+
+/* Fila del medio: izq | centro | der */
+.p1-medio {
+  display: grid;
+  grid-template-columns: 120px 1fr 120px;
+  gap: 6px;
+  padding: 6px;
+}
+
+/* Columna lateral: 4 fotos apiladas */
+.p1-col-lat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.p1-col-lat img {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex: 1;
+}
+
+/* Centro: título + gifs + botón */
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 20px 8px;
+}
+.hero h1 {
+  font-family: 'Pacifico', cursive;
+  color: white;
+  font-size: 1.7rem;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.7);
+  line-height: 1.4;
+}
+.gifs-row { display: flex; align-items: flex-end; justify-content: center; gap: 8px; }
+.gifs-row img { width: 75px; height: auto; }
+
+/* ===================== */
+/* PANTALLA 2            */
+/* ===================== */
+.rosa h1 { font-family: 'Pacifico', cursive; color: #ff1493; margin-bottom: 16px; }
+#carta {
+  display: none;
+  font-size: 15px; color: #333;
+  background: white; border-radius: 16px;
+  padding: 18px; max-width: 620px; max-height: 50vh;
+  overflow-y: auto; text-align: left; line-height: 1.6; margin: 10px auto;
+}
+
+/* ===================== */
+/* PANTALLA 3 — carticas */
+/* ===================== */
+.azul h1 { font-family: 'Pacifico', cursive; color: #003366; }
+
+.grid-cartas {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  gap: 7px;
+  width: min(520px, 90vw);
+  height: min(390px, 55vh);
+}
+
+.carta-wrap {
+  perspective: 600px;
+  cursor: pointer;
+}
+.carta-inner {
+  width: 100%; height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.5s ease;
+  border-radius: 8px;
+}
+.carta-wrap.abierta .carta-inner { transform: rotateY(180deg); }
+
+.carta-frente, .carta-atras {
+  position: absolute; inset: 0;
+  border-radius: 8px;
+  backface-visibility: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.carta-frente {
+  background: linear-gradient(135deg, #003a7d, #0066cc);
+  flex-direction: column; gap: 2px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+}
+.sobre-icon { font-size: 20px; }
+.toca-txt   { font-size: 8px; color: rgba(255,255,255,0.75); }
+.carta-atras {
+  background: white;
+  transform: rotateY(180deg);
+  font-size: 10px; color: #333;
+  padding: 5px; text-align: center; line-height: 1.3; font-weight: 500;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+}
+</style>
+</head>
+<body>
+
+<div class="corazones"></div>
+
+<!-- ============ PANTALLA 1 ============ -->
+<div class="pantalla roja activa" id="p1">
+
+  <!-- 4 fotos arriba -->
+  <div class="p1-fila-top">
+    <img src="1.jpg" alt=""><img src="2.jpg" alt=""><img src="3.jpg" alt=""><img src="4.jpg" alt="">
+  </div>
+
+  <!-- medio: 4 izq | hero | 4 der -->
+  <div class="p1-medio">
+    <div class="p1-col-lat">
+      <img src="5.jpg" alt=""><img src="6.jpg" alt=""><img src="7.jpg" alt=""><img src="8.jpg" alt="">
+    </div>
+
+    <div class="hero">
+      <h1>🎉 Feliz Cumpleaños<br>Mi Novio Lindo 🎉</h1>
+      <div class="gifs-row">
+        <img src="globos.gif" alt="globos">
+        <img src="mario.gif"  alt="mario">
+        <img src="pastel.gif" alt="pastel">
+      </div>
+      <button onclick="cambiar('p2')">Sigue Acá ❤️</button>
+    </div>
+
+    <div class="p1-col-lat">
+      <img src="9.jpg" alt=""><img src="10.jpg" alt=""><img src="11.jpg" alt=""><img src="12.jpg" alt="">
+    </div>
+  </div>
+
+  <!-- 4 fotos abajo -->
+  <div class="p1-fila-bot">
+    <img src="13.jpg" alt=""><img src="14.jpg" alt=""><img src="15.jpg" alt=""><img src="16.jpg" alt="">
+  </div>
+
+</div>
+
+<!-- ============ PANTALLA 2 ============ -->
+<div class="pantalla rosa" id="p2">
+  <h1>Te amo mucho mi amor 💗</h1>
+  <audio id="musica" loop><source src="cancion.mp3" type="audio/mpeg"></audio>
+  <button onclick="mostrarCarta()">Ábreme 💌</button>
+  <div id="carta">
+    <p>❤️ Mi amor lindo ❤️, te amo muchísimo mi corazón enserio te amo como no tienes idea, feliz cumpleaños mi corazón lindo 🎂🎉🎉, espero que hoy te vaya muy bien mi niño lindo. Enserio eres lo mejor que me ha pasado, y jamás me cansaré de decírtelo, eres alguien tan lindo y tierno amor y me encantas, me encantasssssss demasiado. Se que ya hemos hablado de esto pero pues jamás imaginé enamorarme así, porque por un lado medio mundo me fastidia fácilmente y por otro sinceramente no creía que existiera alguien para mí, soy alguien muy exacta con lo que busca y pues no creía encontrar alguien así, pero lo encontré y te amo como no tienes idea amor enserio, me haces tan feliz, que si que a veces hemos peleado y tenido diferencias, pero amor la verdad lo que más amor de ti es que eres alguien tan considerado que si me escucha, porque se que puedo ser cansona jaja pero siempre intentas entenderme y lo amo amor, enserio te amooooo, amo cuando sonríes, cuando nos reímos juntos, cuando me abrazas, cuando me besas, amo tu olor, amo tocarte tu pelo, tu carita linda, amo todo de ti, amo cada centímetro de ti mi vida enserio, y pues se que llevamos poco JAJAJA pero enserio es la primera vez que me veo a futuro con alguien, enserio me siento tan cómoda contigo amor, con nadie he sido como soy contigo y lo digo enserio, porque pues sentía que pues en general los hombres me valen verga (ignorando mis amigos y familia Jajaj) pero cuando te conocí no sé amor, por ti quiero hacer de todo, por ti quiero ser tierna y cursi, por ti quiero pues intentar no ser malvada JAJAJ, y enserio eres el primer hombre con quién no soy mala JAJAJA en general hasta con mis amigos hago demasiado bullying pero contigo no soy capaz, odiaria hacerte algo o hacerte sentir mal de cualquier forma mi corazón ❤️, eres eso que no sabía que quería pero ahora que te tengo no me imagino una vida sin ti amor, gracias por estar en mi vida y ser la persona y novio tan lindo y perfecto que eres. Pero en fin JAJAJ, feliz cumpleaños mi vida ❤️, espero que todos los deseos que pidas hoy se cumplan mi vida, que la pases bien con tu familia y tus amigos, enserio espero que la pases super bien hoy, que estés feliz con las personas que amas mi vida, que sigamos juntos y pueda seguir celebrando tu cumpleaños mi corazón ❤️ te amo muchooo ❤️, sabes que siempre estaré para ti mi amor en las buenas y en las malas, siempre contigo. (Mucho texto, mera biblia JAJAJA).</p>
+    <br><img src="snoopy.gif" width="140">
+  </div>
+  <br>
+  <button onclick="cambiar('p3')">Continúa 💕</button>
+</div>
+
+<!-- ============ PANTALLA 3 ============ -->
+<div class="pantalla azul" id="p3">
+  <h1>💙 Feliz Cumple Corazón 💙</h1>
+  <div class="grid-cartas">
+    <div class="carta-wrap" onclick="abrirCarta(this)"><div class="carta-inner"><div class="carta-frente"><span class="sobre-icon">💌</span></div><div class="carta-atras">Te amo con todo mi corazón ❤️</div></div></div>
+
+<div class="carta-wrap" onclick="abrirCarta(this)"><div class="carta-inner"><div class="carta-frente"><span class="sobre-icon">💌</span></div><div class="carta-atras">Aunque es muy pronto me gustaría casarme contigo</div></div></div>
+
+<div class="carta-wrap" onclick="abrirCarta(this)"><div class="carta-inner"><div class="carta-frente"><span class="sobre-icon">💌</span></div><div class="carta-atras">Sólo te quiero a ti y a nadie más</div></div></div>
+
+<div class="carta-wrap" onclick="abrirCarta(this)"><div class="carta-inner"><div class="carta-frente"><span class="sobre-icon">💌</span></div><div class="carta-atras">Haría enserio lo que fuera por ti</div></div></div>
+
+<div class="carta-wrap" onclick="abrirCarta(this)"><div class="carta-inner"><div class="carta-frente"><span class="sobre-icon">💌</span></div><div class="carta-atras">Eres tan lindo y perfecto amor</div></div></div>
+
+<div class="carta-wrap" onclick="abrirCarta(this)"><div class="carta-inner"><div class="carta-frente"><span class="sobre-icon">💌</span></div><div class="carta-atras">Tu carita es tan linda</div></div></div>
+
+<div class="carta-wrap" onclick="abrirCarta(this)"><div class="carta-inner"><div class="carta-frente"><span class="sobre-icon">💌</span></div><div class="carta-atras">Me encantasssssss demasiadoooo</div></div></div>
+
+<div class="carta-wrap" onclick="abrirCarta(this)"><div class="carta-inner"><div class="carta-frente"><span class="sobre-icon">💌</span></div><div class="carta-atras">Ahora que te conozco no me imagino una vida sin ti</div></div></div>
+
+<div class="carta-wrap" onclick="abrirCarta(this)"><div class="carta-inner"><div class="carta-frente"><span class="sobre-icon">💌</span></div><div class="carta-atras">Amo todo de tiii</div></div></div>
+
+<div class="carta-wrap" onclick="abrirCarta(this)"><div class="carta-inner"><div class="carta-frente"><span class="sobre-icon">💌</span></div><div class="carta-atras">Estoy completamente enamorada con tu forma de ser mi corazón</div></div></div>
+
+<div class="carta-wrap" onclick="abrirCarta(this)"><div class="carta-inner"><div class="carta-frente"><span class="sobre-icon">💌</span></div><div class="carta-atras">Amo esos momentos cuando nos reímos juntos</div></div></div>
+
+<div class="carta-wrap" onclick="abrirCarta(this)"><div class="carta-inner"><div class="carta-frente"><span class="sobre-icon">💌</span></div><div class="carta-atras">Me complementas de una forma tan única y linda</div></div></div>
+
+<div class="carta-wrap" onclick="abrirCarta(this)"><div class="carta-inner"><div class="carta-frente"><span class="sobre-icon">💌</span></div><div class="carta-atras">Te deseo a tiii y sólo a ti</div></div></div>
+
+<div class="carta-wrap" onclick="abrirCarta(this)"><div class="carta-inner"><div class="carta-frente"><span class="sobre-icon">💌</span></div><div class="carta-atras">Amo que nos parezcamos en tantas cosas mi vida</div></div></div>
+
+<div class="carta-wrap" onclick="abrirCarta(this)"><div class="carta-inner"><div class="carta-frente"><span class="sobre-icon">💌</span></div><div class="carta-atras">Un poco tóxica pero amo que ser la primera con la que te sientes de esta forma</div></div></div>
+
+<div class="carta-wrap" onclick="abrirCarta(this)"><div class="carta-inner"><div class="carta-frente"><span class="sobre-icon">💌</span></div><div class="carta-atras">Eres el amor de mi vida y todas las vidas que pueda tener</div></div></div>
+
+<div class="carta-wrap" onclick="abrirCarta(this)"><div class="carta-inner"><div class="carta-frente"><span class="sobre-icon">💌</span></div><div class="carta-atras">Eres la coincidencia más linda que pude tener, y que espero que seas mi destino y mi para simpre mi príncipe</div></div></div>
+
+<div class="carta-wrap" onclick="abrirCarta(this)"><div class="carta-inner"><div class="carta-frente"><span class="sobre-icon">💌</span></div><div class="carta-atras">Sé que soy cerrada y no lo parece pero enserio eres mi lugar seguro, eres al único que dejo que me vea llorar y me vea cuando estoy mal</div></div></div>
+
+<div class="carta-wrap" onclick="abrirCarta(this)"><div class="carta-inner"><div class="carta-frente"><span class="sobre-icon">💌</span></div><div class="carta-atras">Eres tan importante para mi que siempre te estoy pensando</div></div></div>
+
+<div class="carta-wrap" onclick="abrirCarta(this)"><div class="carta-inner"><div class="carta-frente"><span class="sobre-icon">💌</span></div><div class="carta-atras">Te amo tanto que enserio siento que decirtelo no es suficiente</div></div></div>
+
+  </div>
+  <video width="260" controls style="border-radius:12px; flex-shrink:0;">
+    <source src="video.mp4" type="video/mp4">
+  </video>
+</div>
+
+<script>
+  function crearCorazon() {
+    const c = document.createElement("span");
+    c.innerHTML = "💖";
+    c.style.left = Math.random() * 100 + "vw";
+    c.style.fontSize = (Math.random() * 20 + 10) + "px";
+    c.style.animationDuration = (Math.random() * 5 + 5) + "s";
+    document.querySelector(".corazones").appendChild(c);
+    setTimeout(() => c.remove(), 10000);
+  }
+  setInterval(crearCorazon, 300);
+
+  function cambiar(id) {
+    document.querySelectorAll(".pantalla").forEach(p => p.classList.remove("activa"));
+    document.getElementById(id).classList.add("activa");
+    window.scrollTo(0, 0);
+    if (id === "p2") document.getElementById("musica").play();
+  }
+
+  function mostrarCarta() {
+    document.getElementById("carta").style.display = "block";
+  }
+
+  function abrirCarta(el) {
+    el.classList.toggle("abierta");
+  }
+</script>
+</body>
+</html>
